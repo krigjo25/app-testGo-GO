@@ -5,12 +5,12 @@ import (
 	"fmt"
 )
 
-type folio struct {
+type DecodeEngine struct {
 	buf  []byte
 	seed int
 }
 
-func (f *folio) bar(b1, b2 *byte, i, j int) {
+func (f *DecodeEngine) bar(b1, b2 *byte, i, j int) {
 	*b1 = byte(j>>8) ^ f.buf[(i+f.seed)%len(f.buf)]
 	*b2 = byte(j) ^ f.buf[(i+f.seed+1)%len(f.buf)]
 }
@@ -24,7 +24,7 @@ func main() {
 		fmt.Println(string(baz))
 	}()
 
-	f := folio{buf: secret, seed: 1337}
+	f := DecodeEngine{buf: secret, seed: 1337}
 	defer f.bar(&baz[8], &baz[9], 8, 21)
 	defer f.bar(&baz[0], &baz[1], 0, 4634)
 	defer f.bar(&baz[12], &baz[13], 12, 2139)
